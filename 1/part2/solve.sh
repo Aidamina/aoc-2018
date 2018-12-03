@@ -1,1 +1,1 @@
-cat input.txt | docker run -i $(docker build -q .)
+cat ../input.txt | docker run --rm -i $(docker build -q .)

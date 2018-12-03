@@ -10,18 +10,23 @@ import (
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(reader)
-	var reached = map[int]bool{0: true}
-	var frequency int
+	var deltas []int
 	for scanner.Scan() {
 		delta, err := strconv.Atoi(scanner.Text())
 		if err == nil {
+			deltas = append(deltas, delta)
+		}
+	}
+	var seen = map[int]bool{0: true}
+	var frequency int
+	for {
+		for _, delta := range deltas {
 			frequency += delta
-			if _, ok := reached[frequency]; ok {
+			if _, ok := seen[frequency]; ok {
 				fmt.Println(frequency)
 				os.Exit(0)
 			}
-			reached[frequency] = true
+			seen[frequency] = true
 		}
 	}
-	os.Exit(1)
 }
