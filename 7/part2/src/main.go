@@ -9,10 +9,14 @@ import (
 )
 
 type Step struct {
-	id       string
-	complete bool
-	next     []*Step
-	prev     []*Step
+	id   string
+	todo int
+	next []*Step
+	prev []*Step
+}
+
+func taskLength(id string) int {
+	return int([]rune(id)[0]) - 4
 }
 
 func main() {
@@ -25,7 +29,8 @@ func main() {
 		var step = steps[id]
 		if step == nil {
 			step = &Step{
-				id: id,
+				id:   id,
+				todo: taskLength(id),
 			}
 			steps[id] = step
 		}
@@ -42,14 +47,14 @@ func main() {
 		first.next = append(first.next, second)
 		second.prev = append(second.prev, first)
 	}
-
+	var second int
 	for {
 		var ready []string
 		for id, step := range steps {
-			if !step.complete {
+			if step.todo > 0 {
 				var preqMet = true
 				for _, p := range step.prev {
-					if !p.complete {
+					if p.todo > 0 {
 						preqMet = false
 					}
 				}
@@ -60,15 +65,15 @@ func main() {
 		}
 		if len(ready) > 0 {
 			sort.Strings(ready)
-			for _, id := range ready {
-				steps[id].complete = true
-				fmt.Printf("%s", id)
-				break
+			for i := 0; i < 5 && i < len(ready); i++ {
+				steps[ready[i]].todo--
 			}
+			second++
 		} else {
 			break
 		}
+
 	}
 
-	fmt.Println()
+	fmt.Printf("%d\n", second)
 }
