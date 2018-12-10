@@ -33,12 +33,6 @@ type Star struct {
 	steps    int
 }
 
-func (star *Star) Reset() {
-	star.Step(-star.steps)
-	star.steps = 0
-
-}
-
 func (star *Star) Step(steps int) {
 	star.position = NewVec2(star.position.x()+(steps*star.velocity.x()), star.position.y()+(steps*star.velocity.y()))
 	star.steps += steps
